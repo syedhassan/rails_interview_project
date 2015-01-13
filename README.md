@@ -22,6 +22,7 @@ The repository provides sample markup for each in the `public` directory. Additi
 After creating the inital models we thought of some specific changes we'd like to see as well:
 
 2) Implement a location model to represent a parking facility.  `name` and `address` fields are all that are required.  Refactor the Listing model accordingly.
+
 3) Implement a seller model to represent the company that owns or operates the parking location. A `name` attribute is all that is required. Refactor the Listing model accordingly.
 
 Feel free to make any additional changes you'd like.
