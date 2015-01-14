@@ -12,12 +12,14 @@ Requirements
 
 Your app will provide 2 pages:
 
-* The *Driver* page allows drivers to enter a range of time in which they’d like to park.  The page then indicates whether parking is available, and if so, shows the price and allows them to book the time period.
+* The *Driver* page allows drivers to enter a range of time in which they’d like to park.  The page then indicates whether parking is available, and if so, shows the price and allows them to book the time period. 
 * The *Admin Listings* page shows a table of parking listings with the availability and price for each.
+
+(NOTE: SAMPLE PAGES ARE PROVIDED IN PUBLIC FOLDER, PLEASE USE THEM FOR YOUR VIEWS)
 
 The repository provides sample markup for each in the `public` directory. Additionally it serves as a skeleton Rails app and includes some basic models, a starting database schema, and seed data. Please use this as a starting point to create your app. 
 
-1) You should wire up both pages to be fully functional.
+1) You should wire up both pages to be fully functional. 
 
 After creating the inital models we thought of some specific changes we'd like to see as well:
 
