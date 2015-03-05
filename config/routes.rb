@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+
+  get  'driver'  => 'parking#index'
+
+  resources :parking do
+    get 'availability', :on => :collection
+    post 'book', :on => :collection
+  end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

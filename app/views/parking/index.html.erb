@@ -50,6 +50,16 @@
             <p>Parking is not available from <span class="quote-start"></span> to <span class="quote-end"></span>.</p>
         </div>
     </div>
+    <div style="display:none" class="row" id="confirmation">
+        <div class="twelve columns">
+            <p>Your confirmation number is <strong><span class="number"></span></strong> .</p>
+        </div>
+    </div>
+    <div style="display:none" class="row" id="error">
+        <div class="twelve columns">
+            <p>Sorry the space that you were trying to booked is not available right now. Please try again!</p>
+        </div>
+    </div>
 </div>
 
 <!-- You may, but are not required use this script as a starting point. It's simply here to demonstrate functionality -->
@@ -61,17 +71,55 @@
     $(".date").datepicker("setDate", new Date());
 
     $("#check-availability").click(checkAvailability);
+    $(".button-primary").click(bookParking);
 
     function checkAvailability() {
         var start = $("#start-date").val() + " " + $("#start-time").val();
         var end = $("#end-date").val() + " " + $("#end-time").val();
 
-        /* Replace this with real logic, or just submit the form */
-        if (Math.floor((Math.random() * 2))) {
-            parkingNotAvailable(start, end);
-        } else {
-            parkingAvailable(start, end, Math.floor((Math.random() * 25) + 1));
-        }
+        $.ajax({
+            type: "GET",
+            url: "/parking/availability",
+            data: { start: start, end: end},
+            dataType: "text",
+            success:function(data) {
+                var json = $.parseJSON(data);
+                if (json.available) {
+                    console.log(json.available.listing_id);
+                    console.log(json.available.amount);
+                    $("#parking-available").attr("listing_id", json.available.listing_id);
+                    parkingAvailable(start, end, json.available.amount);
+                } else {
+                    parkingNotAvailable(start, end);
+                }
+            },
+            error:function(data) {
+                parkingNotAvailable(start, end);
+            }
+        });
+    }
+
+    function bookParking() {
+        var start = $("#start-date").val() + " " + $("#start-time").val();
+        var end = $("#end-date").val() + " " + $("#end-time").val();
+        var listing_id = $("#parking-available").attr("listing_id");
+        $.ajax({
+            type: "POST",
+            url: "/parking/book",
+            data: { start: start, end: end, listing_id: listing_id},
+            dataType: "text",
+            success:function(data) {
+                var json = $.parseJSON(data);
+                if (json.booking_id) {
+                    showConfirmation(json.booking_id);
+                } else {
+                    showError();
+                }
+            },
+            error:function(data) {
+                showError();
+            }
+        });
     }
 
     function parkingNotAvailable(start, end) {
@@ -85,6 +133,18 @@
         $(".quote-end").html(end);
         $(".quote-amount").html(amount);
         $("#parking-available").show();
+        $("#parking-not-available").hide();
+    }
+    function showConfirmation(number) {
+        $(".number").html(number);
+        $("#confirmation").show();
+        $("#parking-available").hide();
+        $("#parking-not-available").hide();
+    }
+    function showError() {
+        $("#error").show();
+        $("#confirmation").hide();
+        $("#parking-available").hide();
         $("#parking-not-available").hide();
     }
 </script>
